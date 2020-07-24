@@ -52,15 +52,17 @@ The disk backed queue is implemented using two key points:
 1.	Object classes for storing queue elements in memory and on disk
 2.	Serializing and Deserializing the queue elements when storing to and reading from the disk
 
-Each queue element is defined using Node class which has the attributes 'next' and 'value'. To store excess part of queue on disk, StoredQueue is defined that have only the 'head' and 'tail' attribute. StoredQueue mimics the Queue class with minimal attributes. In this way, we have a similar queue structure on disk that is easily processed. Pickle is used for serializing and deserializing the StoredQueue objects.
+Each queue element is defined using Node class which has the attributes 'next' and 'value'. The maximum number of elements to be stored is determined by the attribute max-in-memory.Values are stored in memory as Node objects until in-memory counter reaches max-in-memory count.Once the queue is full, next element values are stored directly to disk using pickle and a on-disk counter is incremented. If the max-in-memory is zero, then all elements are directly stored on to disk and on-disk counter is incremented
 
-The number of elements that can be stored in the memory is defined by the max-in-memory attribute. Until max-in-memory, values are stored in memory as Node objects and a in-memory counter is incremented. When the queue is full, excess elements are stored directly to disk using pickle and a on-disk counter is incremented. If the max-in-memory is zero, then all elements are directly stored on to disk and on-disk counter is incremented.
+To store excess part of queue on disk, StoredQueue is defined that has only the 'head' and 'tail' attribute which act as pointers to define first and last element of queue respectively. It helps in mimicking the queue FIFO operation.StoredQueue mimics the Queue class with minimal attributes.
+In this way, we have a similar queue structure on disk that is easily processed.
+To store the node objects onto the disk, they need to be serialized and to read it from the disk, they need to be deserialized.Hence,Pickle is used for serializing and deserializing the StoredQueue objects.
 
 
 ### External Resources used
 
-1. I read about file implemenation, serializing/deserializing from different websites.
-2. I also referred to computer architecture and its implemenation to see how/when/what to store to disk for better performance
+1. I referred file implementation, serializing/deserializing from different websites.
+2. I also referred to computer architecture and its implementation to see how/when/what to store to disk for better performance
 
 ### Time Taken
 
